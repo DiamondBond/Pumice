@@ -36,7 +36,5 @@ $c ▄▄▄▄▀▀▄▄▄▄ $r
 $c ████  ████ $r
   ${d}panel$r    $swatches
 $c  ▀▀▀  ▀▀▀  $r
-  ${d}switch$r   ctrl+shift+f5
-$c            $r
   ${d}github.com/DiamondBond/Pumice$r
 EOF
