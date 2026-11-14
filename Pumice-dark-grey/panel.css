@@ -17,33 +17,36 @@
 }
 .xfce4-panel label { color: @pm_text; }
 
-/* every panel button: flat, soft rounded hover */
+/* every panel button: flat, soft rounded hover. The 1px inset is a transparent
+   border, not a margin, so the button still takes clicks on the screen edge */
 .xfce4-panel button {
   background: none;
-  border: none;
+  background-clip: padding-box;
+  border: solid transparent;
+  border-width: 1px 0;
   box-shadow: none;
   border-radius: 6px;
-  margin: 1px 1px;
+  margin: 0 1px;
   padding: 0 6px;
   min-height: 0;
   color: @pm_text;
   -gtk-icon-shadow: none;
   transition: background 120ms ease-out;
 }
-.xfce4-panel button:hover          { background: @pm_hover; }
+.xfce4-panel button:hover          { background-color: @pm_hover; }
 .xfce4-panel button:active,
-.xfce4-panel button:checked        { background: @pm_on; }
+.xfce4-panel button:checked        { background-color: @pm_on; }
 
 /* Applications menu: icon only */
 #applicationmenu-button { padding: 0 6px; margin-right: 0; }
 
 /* tasklist: other windows dimmed, focused one in strong text */
-.tasklist button               { padding: 0 6px; margin: 1px 1px; }
+.tasklist button               { padding: 0 6px; margin: 0 1px; }
 .tasklist button label         { color: @pm_dim; }
 .tasklist button:hover label,
 .tasklist button:checked label { color: @pm_strong; }
-.tasklist button:checked       { background: none; }
-.tasklist button:checked:hover { background: @pm_hover; }
+.tasklist button:checked       { background-color: transparent; }
+.tasklist button:checked:hover { background-color: @pm_hover; }
 .tasklist button image         { -gtk-icon-effect: none; }
 
 /* clock */
