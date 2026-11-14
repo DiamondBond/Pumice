@@ -25,18 +25,18 @@ done
 
 s=$(pm strong); c=$(fg "${s:-#e2e2e2}")   # the clover in the panel's strongest colour
 paste -d' ' - - <<EOF
-$c ▗██▖ ▗██▖ $r
+$c  ▄▄▄  ▄▄▄  $r
   ${b}pumice$r ${d}·$r $mode ${d}·$r $flavour
-$c ████ ████ $r
+$c ████  ████ $r
   ${d}wm$r       $theme
-$c  ▝██ ██▘  $r
+$c ▀▀▀▀▄▄▀▀▀▀ $r
   ${d}gtk$r      $gtk
-$c     ◆     $r
+$c ▄▄▄▄▀▀▄▄▄▄ $r
   ${d}buttons$r  $dots
-$c  ▗██ ██▖  $r
+$c ████  ████ $r
   ${d}panel$r    $swatches
-$c ████ ████ $r
+$c  ▀▀▀  ▀▀▀  $r
   ${d}switch$r   ctrl+shift+f5
-$c ▝██▘ ▝██▘ $r
+$c            $r
   ${d}github.com/DiamondBond/Pumice$r
 EOF
