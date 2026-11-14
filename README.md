@@ -40,6 +40,7 @@ cd Pumice
 
 - links the four themes into `~/.themes`
 - adds one `@import` line to `~/.config/gtk-3.0/gtk.css` for the panel styling
+- adds one `@theme` line to `~/.config/rofi/config.rasi` for a matching rofi
 - puts the window buttons on the right, without the app-icon menu
 - switches the panel to theme-painted, with 16px icons and an icon-only menu
 - switches the workspace switcher to buttons mode
@@ -54,7 +55,7 @@ Everything it changes is saved first to `revert.sh`. Run that to undo.
 ./pumice-mode.sh dark grey  # or pick one
 ```
 
-This switches the window frames, the panel, the GTK theme and the desktop
+This switches the window frames, the panel, rofi, the GTK theme and the desktop
 `color-scheme`, which Firefox and GTK4 apps follow. The colour/grey flavour is
 kept unless you name one.
 

@@ -1,0 +1,58 @@
+/* Pumice-grey rofi colours; rules live in rofi-base.rasi (generated, edit build.py) */
+* {
+  pm-bg: #ffffff;
+  pm-line: #e2e2e2;
+  pm-text: #3a3a3a;
+  pm-dim: #555555;
+  pm-strong: #111111;
+  pm-hover: #ededed;
+  pm-on: #e2e2e2;
+  pm-dot: #d4d4d4;
+  pm-border: #2e2e2e;
+}
+/* Pumice rofi rules. Colours (pm-*) are defined per variant by build.py. */
+
+* {
+  font: "Sans 10";
+  background-color: transparent;
+  text-color: @pm-text;
+  margin: 0; padding: 0; spacing: 0;
+}
+
+/* a window like the frames: hairline border, rounded corners */
+window {
+  width: 480px;
+  background-color: @pm-bg;
+  border: 1px;
+  border-color: @pm-border;
+  border-radius: 10px;
+}
+
+inputbar {
+  padding: 8px 12px;
+  spacing: 8px;
+  border: 0 0 1px;
+  border-color: @pm-line;
+  children: [ prompt, entry ];
+}
+prompt { text-color: @pm-dim; }
+entry  { text-color: @pm-strong; placeholder: "Search"; placeholder-color: @pm-dim; cursor: text; }
+
+message { border: 0 0 1px; border-color: @pm-line; }
+textbox { padding: 6px 12px; }
+
+listview {
+  padding: 4px;
+  lines: 10;
+  columns: 1;
+  fixed-height: false;
+  dynamic: true;
+  scrollbar: false;
+}
+
+/* soft rounded rows, as on the panel */
+element { padding: 5px 8px; spacing: 8px; border-radius: 6px; cursor: pointer; }
+element normal active, element alternate active { text-color: @pm-strong; }
+element selected { background-color: @pm-on; text-color: @pm-strong; }
+element-icon { size: 16px; vertical-align: 0.5; }
+element-text { text-color: inherit; vertical-align: 0.5; }

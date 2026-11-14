@@ -4,9 +4,10 @@
 """Renders every Pumice theme: Pumice, Pumice-dark and their -grey flavours.
 
 For each: the xfwm4 images and themerc, the panel's window-button images (unity/,
-for xfce4-windowck-plugin), the menu icon and panel.css (panel-base.css plus that
-variant's colours). Needs pycairo. The output is committed, so installing doesn't
-need this; run it after changing anything here or in panel-base.css."""
+for xfce4-windowck-plugin), the menu icon, panel.css (panel-base.css plus that
+variant's colours) and rofi.rasi (rofi-base.rasi likewise). Needs pycairo. The
+output is committed, so installing doesn't need this; run it after changing
+anything here, in panel-base.css or in rofi-base.rasi."""
 import math, os, cairo
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -239,6 +240,11 @@ for theme, v in VARIANTS.items():
         f.write(f"/* {theme} panel colours; rules live in panel-base.css (generated, edit build.py) */\n")
         f.write("".join(f"@define-color pm_{k} {c};\n" for k, c in v["panel"].items()))
         f.write(open(os.path.join(HERE, "panel-base.css")).read())
+    with open(os.path.join(root, "rofi.rasi"), "w") as f:
+        f.write(f"/* {theme} rofi colours; rules live in rofi-base.rasi (generated, edit build.py) */\n* {{\n")
+        f.write("".join(f"  pm-{k}: {c};\n" for k, c in {**v["panel"], "bg": FRAME["active"]["bg"],
+                                                          "line": FRAME["active"]["sep"], "border": FRAME["active"]["border"]}.items()))
+        f.write("}\n" + open(os.path.join(HERE, "rofi-base.rasi")).read())
     with open(os.path.join(root, "index.theme"), "w") as f:
         f.write(f"[Desktop Entry]\nType=X-GNOME-Metatheme\nName={theme}\n\n[X-GNOME-Metatheme]\n"
                 f"GtkTheme={'Adwaita-dark' if 'dark' in theme else 'Adwaita'}\nMetacityTheme={theme}\n")
