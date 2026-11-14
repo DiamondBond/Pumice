@@ -38,7 +38,9 @@ rofi=${XDG_CONFIG_HOME:-$HOME/.config}/rofi/config.rasi
   [ -n "$pager" ] && echo "xfconf-query -c xfce4-panel -p /plugins/plugin-$pager/miniature-view -n -t bool -s $(q xfce4-panel /plugins/plugin-$pager/miniature-view || echo true)"
   q xfce4-keyboard-shortcuts "$key" >/dev/null || echo "xfconf-query -c xfce4-keyboard-shortcuts -p '$key' -r"
   echo "gsettings set org.gnome.desktop.interface color-scheme $(gsettings get org.gnome.desktop.interface color-scheme)"
-  command -v kreadconfig6 >/dev/null && echo "kwriteconfig6 --file kdeglobals --group Icons --key Theme '$(kreadconfig6 --file kdeglobals --group Icons --key Theme)'"
+  kg=${XDG_CONFIG_HOME:-$HOME/.config}/kdeglobals
+  [ -f "$kg" ] && cp "$kg" "$kg.pumice-bak" && echo "mv -f '$kg.pumice-bak' '$kg'"
+  echo "sed -i '/^export QT_QPA_PLATFORMTHEME=kde\$/d' ~/.xprofile"
   echo "xfce4-panel -r"
 } > revert.sh && chmod +x revert.sh
 
@@ -53,6 +55,11 @@ grep -qF "$import" "$gtkcss" || printf '\n%s\n' "$import" >> "$gtkcss"
 # rofi: themed to follow the current variant (a later @theme in config.rasi wins)
 mkdir -p "$(dirname "$rofi")"; touch "$rofi"
 grep -qF pumice/current/rofi.rasi "$rofi" || printf '\n@theme "%s"\n' "$HOME/.local/share/pumice/current/rofi.rasi" >> "$rofi"
+
+# Qt: the KDE platform theme, so KDE apps take their icons and colours from kdeglobals
+# (which pumice-mode.sh keeps in step) instead of GTK's icon theme; read at login
+grep -qx 'export QT_QPA_PLATFORMTHEME=kde' ~/.xprofile 2>/dev/null ||
+  printf '\nexport QT_QPA_PLATFORMTHEME=kde\n' >> ~/.xprofile
 
 # xfwm4: buttons on the right with no app-icon menu (Alt+Space or right-click
 # on the title still opens it); the corner pieces are drawn for this layout
