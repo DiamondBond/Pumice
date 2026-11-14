@@ -23,6 +23,7 @@ ln -sfn "$HOME/.themes/$theme" ~/.local/share/pumice/current
 
 xfconf-query -c xfwm4 -p /general/theme -s $theme
 xfconf-query -c xsettings -p /Net/ThemeName -s $gtk
+xfconf-query -c xfce4-notifyd -p /theme -n -t string -s $theme
 xfconf-query -c xfce4-panel -p /panels/dark-mode -n -t bool -s $dark
 gsettings set org.gnome.desktop.interface color-scheme $scheme
 # KDE apps (through QT_QPA_PLATFORMTHEME=kde, set by install.sh) take their colours

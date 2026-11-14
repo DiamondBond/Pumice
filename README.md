@@ -25,6 +25,8 @@ The panel styling, loaded on top of Adwaita, gives you:
 - the workspace switcher drawn as small dots
 - dimmed labels for unfocused tasks
 
+Notifications (xfce4-notifyd) get the panel colours and the window frames' border.
+
 ## Install
 
 Needs Xfce 4.20 (xfwm4 + xfce4-panel).
@@ -56,7 +58,7 @@ Everything it changes is saved first to `revert.sh`. Run that to undo.
 ./pumice-mode.sh dark grey  # or pick one
 ```
 
-This switches the window frames, the panel, rofi, the GTK theme and the desktop
+This switches the window frames, the panel, notifications, rofi, the GTK theme and the desktop
 `color-scheme`, which Firefox and GTK4 apps follow. The colour/grey flavour is
 kept unless you name one.
 

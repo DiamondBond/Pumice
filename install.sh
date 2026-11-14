@@ -25,6 +25,7 @@ rofi=${XDG_CONFIG_HOME:-$HOME/.config}/rofi/config.rasi
   echo "sed -i '\\|pumice/current/panel.css|d' '$gtkcss'"
   echo "xfconf-query -c xsettings -p /Net/ThemeName -s '$(q xsettings /Net/ThemeName)'"
   echo "xfconf-query -c xfwm4 -p /general/theme -s '$(q xfwm4 /general/theme)'"
+  echo "xfconf-query -c xfce4-notifyd -p /theme -n -t string -s '$(q xfce4-notifyd /theme || echo Default)'"
   echo "xfconf-query -c xfwm4 -p /general/button_layout -s '$(q xfwm4 /general/button_layout)'"
   echo "xfconf-query -c xfwm4 -p /general/title_font -s '$(q xfwm4 /general/title_font)'"
   echo "xfconf-query -c xfce4-panel -p /panels/dark-mode -n -t bool -s $(q xfce4-panel /panels/dark-mode || echo false)"

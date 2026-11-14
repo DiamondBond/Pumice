@@ -5,9 +5,10 @@
 
 For each: the xfwm4 images and themerc, the panel's window-button images (unity/,
 for xfce4-windowck-plugin), the menu icon, panel.css (panel-base.css plus that
-variant's colours) and rofi.rasi (rofi-base.rasi likewise). Needs pycairo. The
-output is committed, so installing doesn't need this; run it after changing
-anything here, in panel-base.css or in rofi-base.rasi."""
+variant's colours), xfce-notify-4.0/gtk.css (notify-base.css likewise) and rofi.rasi
+(rofi-base.rasi likewise). Needs pycairo. The output is committed, so installing
+doesn't need this; run it after changing anything here, in panel-base.css,
+notify-base.css or rofi-base.rasi."""
 import math, os, cairo
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -25,7 +26,7 @@ VARIANTS = {
         frame={"active":   dict(bg="#ffffff", border="#2e2e2e", sep="#e2e2e2"),
                "inactive": dict(bg="#f7f7f7", border="#5c5c5c", sep="#ebebeb")},
         edge="#707070",                                  # corner edge pixels blend toward this: mid grey suits white and black behind
-        idle=("#f6f6f6", "#ececec", "#d0d0d0"),          # unfocused dot: top, bottom, ring
+        idle=("#ececec", "#d0d0d0"),                     # unfocused dot: fill, rim
         grey=("#e6e6e6", "#5a5a5a"),                     # grey flavour: focused dot, hover marks
         text=("#1f1f1f", "#9a9a9a"),                     # title: focused, unfocused
         panel=dict(bg="#fbfbfb", line="#d6d6d6", text="#3a3a3a", dim="#555555",
@@ -35,7 +36,7 @@ VARIANTS = {
         frame={"active":   dict(bg="#2c2c2c", border="#0a0a0a", sep="#1e1e1e"),
                "inactive": dict(bg="#242424", border="#151515", sep="#1c1c1c")},
         edge="#3a3a3a",
-        idle=("#4a4a4a", "#424242", "#363636"),
+        idle=("#424242", "#363636"),
         grey=("#4f4f4f", "#d4d4d4"),
         text=("#ececec", "#7c7c7c"),
         panel=dict(bg="#1e1e1e", line="#0a0a0a", text="#e2e2e2", dim="#b4b4b4",
@@ -163,19 +164,19 @@ NAMES = ["hide", "maximize", "maximize-toggled", "close", "menu",
 def dot(cr, name, bstate, cx, cy):
     b = BTN[bstate]
     if b is None:
-        top, bot, ring = IDLE
+        fill, sunk = IDLE
+    elif FLAT_GREY:   # dark frames brighten on hover, light darken
+        fill = (tint if DARK else shade)(GREY_DOT, b)
+        sunk = shade(fill, 0.14)
     else:
-        if FLAT_GREY:   # gentler gradient and ring; dark frames brighten on hover, light darken
-            base = (tint if DARK else shade)(GREY_DOT, b)
-            top, bot, ring = tint(base, 0.07), base, shade(base, 0.14)
-        else:
-            base = shade(HUE.get(name, GREY), b)
-            top, bot, ring = tint(base, 0.15), base, shade(base, 0.22)
-    g = cairo.LinearGradient(0, cy - DOT, 0, cy + DOT)
-    g.add_color_stop_rgb(0, *rgb(top)); g.add_color_stop_rgb(1, *rgb(bot))
+        fill = shade(HUE.get(name, GREY), b)
+        sunk = shade(fill, 0.22)
+    # flat dot set into the frame: the darker disc shows as a rim, widest at the
+    # top, as if lit from above
     cr.arc(cx, cy, DOT - 0.5, 0, 2 * math.pi)
-    cr.set_source(g); cr.fill_preserve()
-    cr.set_line_width(1); cr.set_source_rgb(*rgb(ring)); cr.stroke()
+    cr.set_source_rgb(*rgb(sunk)); cr.fill()
+    cr.arc(cx, cy + 0.6, DOT - 1.7, 0, 2 * math.pi)
+    cr.set_source_rgb(*rgb(fill)); cr.fill()
     if name in GLYPHS and bstate in ("prelight", "pressed"):
         cr.set_source_rgba(*rgb(GREY_MARK if FLAT_GREY else shade(HUE[name], 0.62)), 0.9)
         GLYPHS[name](cr, cx, cy)
@@ -244,6 +245,11 @@ for theme, v in VARIANTS.items():
         f.write(f"/* {theme} panel colours; rules live in panel-base.css (generated, edit build.py) */\n")
         f.write("".join(f"@define-color pm_{k} {c};\n" for k, c in v["panel"].items()))
         f.write(open(os.path.join(HERE, "panel-base.css")).read())
+    os.makedirs(os.path.join(root, "xfce-notify-4.0"), exist_ok=True)
+    with open(os.path.join(root, "xfce-notify-4.0", "gtk.css"), "w") as f:
+        f.write(f"/* {theme} notification colours; rules live in notify-base.css (generated, edit build.py) */\n")
+        f.write("".join(f"@define-color pm_{k} {c};\n" for k, c in {**v["panel"], "border": FRAME["active"]["border"]}.items()))
+        f.write(open(os.path.join(HERE, "notify-base.css")).read())
     with open(os.path.join(root, "rofi.rasi"), "w") as f:
         f.write(f"/* {theme} rofi colours; rules live in rofi-base.rasi (generated, edit build.py) */\n* {{\n")
         f.write("".join(f"  pm-{k}: {c};\n" for k, c in {**v["panel"], "bg": FRAME["active"]["bg"],

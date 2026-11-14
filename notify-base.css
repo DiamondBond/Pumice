@@ -1,0 +1,30 @@
+/* Pumice notification rules (xfce4-notifyd). Colours (@pm_*) are defined per
+   variant by build.py. */
+
+/* the bubble: panel colours, the window frames' border colour and corner radius */
+#XfceNotifyWindow {
+  background-color: @pm_bg;
+  border: 1px solid @pm_border;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+#XfceNotifyWindow label         { color: @pm_text; }
+#XfceNotifyWindow label#summary { color: @pm_strong; font-weight: bold; }
+#XfceNotifyWindow image         { color: @pm_text; -gtk-icon-shadow: none; }
+
+/* action buttons: soft rounded pills in the panel's hover shades */
+#XfceNotifyWindow button {
+  background: @pm_hover;
+  border: none;
+  box-shadow: none;
+  border-radius: 6px;
+  padding: 2px 10px;
+  color: @pm_text;
+}
+#XfceNotifyWindow button:hover  { background-color: @pm_on; }
+#XfceNotifyWindow button:active { background-color: @pm_dot; }
+
+/* progress: a thin bar */
+#XfceNotifyWindow progressbar trough   { background-color: @pm_hover; border: none; min-height: 4px; border-radius: 2px; }
+#XfceNotifyWindow progressbar progress { background-color: @pm_strong; border: none; min-height: 4px; border-radius: 2px; }
