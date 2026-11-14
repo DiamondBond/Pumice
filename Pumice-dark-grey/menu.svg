@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16" width="16" height="16">
+  <!-- Pumice menu button: four angular heart leaves, turned 45 degrees so they
+       sit on the diagonals, with a small diamond where they join -->
+  <defs><path id="leaf" d="M8 6.5 L4.6 3.1 L6.9 0.8 L8 1.9 L9.1 0.8 L11.4 3.1 Z"/></defs>
+  <g fill="#ffffff" transform="rotate(45 8 8) translate(8 8) scale(0.92) translate(-8 -8)">
+    <use xlink:href="#leaf"/>
+    <use xlink:href="#leaf" transform="rotate(90 8 8)"/>
+    <use xlink:href="#leaf" transform="rotate(180 8 8)"/>
+    <use xlink:href="#leaf" transform="rotate(270 8 8)"/>
+    <rect x="7.2" y="7.2" width="1.6" height="1.6" transform="rotate(45 8 8)"/>
+  </g>
+</svg>
