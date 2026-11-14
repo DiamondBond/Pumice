@@ -13,11 +13,11 @@ clean with the compositor turned off.
 | Theme              | Frames | Window buttons                                  |
 | ------------------ | ------ | ----------------------------------------------- |
 | `Pumice-grey`      | light  | soft grey dots, a shade stronger on focus       |
-| `Pumice-dark-grey` | dark   | soft grey dots, a shade stronger on focus       |
+| `Pumice-dark-grey` | dark   | soft grey dots, empty sockets when unfocused    |
 | `Pumice`           | light  | red / yellow / green dots on focus, grey when not |
 | `Pumice-dark`      | dark   | red / yellow / green dots on focus, grey when not |
 
-Hovering a button shows its mark (−, ⤢, ×). Apps use stock Adwaita (light) or
+Hovering a button shows its mark (−, ╲, ×). Apps use stock Adwaita (light) or
 Adwaita-dark, so there is no GTK theme to keep in sync.
 
 The panel styling, loaded on top of Adwaita, gives you:

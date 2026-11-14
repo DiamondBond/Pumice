@@ -80,7 +80,7 @@ grep -qF pumice/current/rofi.rasi "$rofi" || printf '\n@theme "%s"\n' "$HOME/.lo
 # xfwm4: buttons on the right with no app-icon menu (Alt+Space or right-click
 # on the title still opens it); the corner pieces are drawn for this layout
 xfconf-query -c xfwm4 -p /general/button_layout -s '|HMC'
-xfconf-query -c xfwm4 -p /general/title_font -s 'Sans Semi-Bold 10'
+xfconf-query -c xfwm4 -p /general/title_font -s 'Sans Medium 10'
 
 # panel: let the theme paint it; 16px icons so the menu ball renders sharp
 x /panels/panel-1/background-style -n -t uint -s 0

@@ -6,6 +6,6 @@ title_shadow_inactive=false
 title_vertical_offset_active=0
 title_vertical_offset_inactive=0
 button_offset=11
-button_spacing=1
+button_spacing=0
 title_horizontal_offset=0
 show_app_icon=false

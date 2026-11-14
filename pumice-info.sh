@@ -16,7 +16,7 @@ if [ $flavour = grey ]; then
   [ $mode = dark ] && g='#4f4f4f' || g='#d8d8d8'
   dots="$(fg $g)● ● ●$r"
 else
-  dots="$(fg '#f4bf4f')●$r $(fg '#61c554')●$r $(fg '#ec6a5e')●$r"
+  dots="$(fg '#dab462')●$r $(fg '#71bb68')●$r $(fg '#da756c')●$r"
 fi
 swatches=
 for k in bg line hover on dot dim text strong; do

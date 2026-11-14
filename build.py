@@ -16,7 +16,7 @@ H = 28          # title bar height
 R = 10          # top corner radius
 CW = 11         # corner piece width
 BOFF = CW       # button offset: buttons stay clear of the rounded corner piece
-BW, BH = 21, H  # button cell
+BW, BH = 22, H  # button cell: even, so a dot centred in it lands on whole pixels
 DOT = 7.5       # button dot radius
 
 # Everything that differs between the light and dark variant. Shapes, sizes and
@@ -36,8 +36,9 @@ VARIANTS = {
         frame={"active":   dict(bg="#2c2c2c", border="#0a0a0a", sep="#1e1e1e"),
                "inactive": dict(bg="#242424", border="#151515", sep="#1c1c1c")},
         edge="#3a3a3a",
-        idle=("#424242", "#363636"),
+        idle=("#2e2e2e", "#1c1c1c"),                     # an empty socket, so focus shows without colour
         grey=("#4f4f4f", "#d4d4d4"),
+        well="#1e1e1e",                                  # dot rim: cut darker than the frame, where a shade of the dot would vanish
         text=("#ececec", "#7c7c7c"),
         panel=dict(bg="#1e1e1e", line="#0a0a0a", text="#e2e2e2", dim="#b4b4b4",
                    strong="#ffffff", hover="#2e2e2e", on="#3a3a3a", dot="#4a4a4a"),
@@ -49,8 +50,9 @@ VARIANTS = {
 for _name in list(VARIANTS):
     VARIANTS[_name + "-grey"] = dict(VARIANTS[_name], flat_grey=True)
 
-# focused windows get colour dots, unfocused ones plain grey dots
-HUE = {"close": "#ec6a5e", "hide": "#f4bf4f", "maximize": "#61c554", "maximize-toggled": "#61c554"}
+# focused windows get colour dots, unfocused ones plain grey dots; the hues are
+# muted to sit with the greys
+HUE = {"close": "#da756c", "hide": "#dab462", "maximize": "#71bb68", "maximize-toggled": "#71bb68"}
 GREY = "#c4c4c4"
 # per button state: how much to darken the dot (None = unfocused grey)
 BTN = {"active": 0.0, "prelight": 0.07, "pressed": 0.2, "inactive": None}
@@ -130,18 +132,12 @@ def frame(state):
         save(t, f"{name}-{state}")
 
 
-# hover glyphs, Mac-style: dark marks inside the colour dot
+# hover glyphs, Mac-style: dark marks inside the colour dot, all in one stroke weight
 def line(cr, *pts, w=1.3):
     cr.move_to(*pts[0])
     for p in pts[1:]:
         cr.line_to(*p)
     cr.set_line_width(w); cr.set_line_cap(cairo.LINE_CAP_ROUND); cr.stroke()
-
-def tri(cr, *pts):
-    cr.move_to(*pts[0])
-    for p in pts[1:]:
-        cr.line_to(*p)
-    cr.close_path(); cr.fill()
 
 def g_close(cr, x, y):
     d = 2.7; line(cr, (x - d, y - d), (x + d, y + d)); line(cr, (x + d, y - d), (x - d, y + d))
@@ -149,13 +145,11 @@ def g_close(cr, x, y):
 def g_hide(cr, x, y):
     line(cr, (x - 3.3, y), (x + 3.3, y), w=1.4)
 
-def g_max(cr, x, y):       # two triangles pointing out to the corners
-    tri(cr, (x - 3.6, y - 3.6), (x + 1.4, y - 3.6), (x - 3.6, y + 1.4))
-    tri(cr, (x + 3.6, y + 3.6), (x - 1.4, y + 3.6), (x + 3.6, y - 1.4))
+def g_max(cr, x, y):       # one diagonal stroke, out toward two corners; a little heavier, as it stands alone
+    d = 2.7; line(cr, (x - d, y - d), (x + d, y + d), w=1.6)
 
-def g_restore(cr, x, y):   # two triangles pointing in to the centre
-    tri(cr, (x - 0.4, y - 0.4), (x - 4.4, y - 0.4), (x - 0.4, y - 4.4))
-    tri(cr, (x + 0.4, y + 0.4), (x + 4.4, y + 0.4), (x + 0.4, y + 4.4))
+def g_restore(cr, x, y):   # the same stroke, mirrored
+    d = 2.7; line(cr, (x + d, y - d), (x - d, y + d), w=1.6)
 
 GLYPHS = {"close": g_close, "hide": g_hide, "maximize": g_max, "maximize-toggled": g_restore}
 NAMES = ["hide", "maximize", "maximize-toggled", "close", "menu",
@@ -168,19 +162,21 @@ def dot(cr, name, bstate, cx, cy):
         fill, sunk = IDLE
     elif FLAT_GREY:   # dark frames brighten on hover, light darken
         fill = (tint if DARK else shade)(GREY_DOT, b)
-        sunk = shade(fill, 0.14)
+        sunk = WELL or shade(fill, 0.14)
     else:
         fill = shade(HUE.get(name, GREY), b)
-        sunk = shade(fill, 0.22)
+        sunk = WELL or shade(fill, 0.22)
     # flat dot set into the frame: the darker disc shows as a rim, widest at the
-    # top, as if lit from above
-    cr.arc(cx, cy, DOT - 0.5, 0, 2 * math.pi)
+    # top, as if lit from above. A well goes round the dot rather than into it, so
+    # it is drawn a pixel larger and the face stays the size of a light dot's
+    r = DOT + (1 if WELL else 0)
+    cr.arc(cx, cy, r - 0.5, 0, 2 * math.pi)
     cr.set_source_rgb(*rgb(sunk)); cr.fill()
-    cr.arc(cx, cy + 0.6, DOT - 1.7, 0, 2 * math.pi)
+    cr.arc(cx, cy + 0.6, r - 1.7, 0, 2 * math.pi)
     cr.set_source_rgb(*rgb(fill)); cr.fill()
     if name in GLYPHS and bstate in ("prelight", "pressed"):
         cr.set_source_rgba(*rgb(GREY_MARK if FLAT_GREY else shade(HUE[name], 0.62)), 0.9)
-        GLYPHS[name](cr, cx, cy)
+        GLYPHS[name](cr, cx, cy + 1)   # centred on the face, which sits low in the dot
 
 
 def buttons(frame_state):
@@ -209,8 +205,8 @@ def panel_buttons():
              "unmaximize": "maximize-toggled", "menu": "menu"}
     for wname, name in names.items():
         for wstate, bstate in states.items():
-            s, cr = surface(BW + 1, 22)
-            dot(cr, name, bstate, (BW + 1) / 2, 11)
+            s, cr = surface(BW, 22)
+            dot(cr, name, bstate, BW / 2, 11)
             s.write_to_png(os.path.join(out, f"{wname}_{wstate}.png"))
 
 
@@ -221,11 +217,11 @@ def preview(theme):
     rows = (("active", "active", ""), ("active", "prelight", " · hover"), ("inactive", "inactive", " · unfocused"))
     s, cr = surface(W + 2 * GAP, len(rows) * (H + GAP) + GAP)
     cr.set_source_rgb(*rgb(EDGE)); cr.paint()
-    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD); cr.set_font_size(13)
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL); cr.set_font_size(13)
     for i, (fstate, bstate, label) in enumerate(rows):
         bar, bcr = title_bg(fstate, W)
         for j, name in enumerate(("close", "maximize", "hide")):   # where xfwm4 puts them for |HMC
-            dot(bcr, name, bstate, W - 1 - BOFF - BW * (j + .5) - j, BH / 2)
+            dot(bcr, name, bstate, W - 1 - BOFF - BW * (j + .5), BH / 2)
         y = GAP + i * (H + GAP)
         cr.set_source_surface(bar, GAP, y); cr.paint()
         cr.set_source_rgb(*rgb(TEXT[fstate == "inactive"]))
@@ -258,6 +254,7 @@ for theme, v in VARIANTS.items():
     FRAME, EDGE, IDLE, TEXT = v["frame"], v["edge"], v["idle"], v["text"]
     FLAT_GREY, (GREY_DOT, GREY_MARK) = v.get("flat_grey", False), v["grey"]
     DARK = "dark" in theme
+    WELL = v.get("well")
     root = os.path.join(HERE, theme)
     os.makedirs(OUT, exist_ok=True)
     with open(os.path.join(root, "menu.svg"), "w") as f:
@@ -295,7 +292,7 @@ title_shadow_inactive=false
 title_vertical_offset_active=0
 title_vertical_offset_inactive=0
 button_offset={BOFF}
-button_spacing=1
+button_spacing=0
 title_horizontal_offset=0
 show_app_icon=false
 """)
