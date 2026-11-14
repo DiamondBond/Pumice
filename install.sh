@@ -66,7 +66,7 @@ grep -qx 'export QT_QPA_PLATFORMTHEME=kde' ~/.xprofile 2>/dev/null ||
 xfconf-query -c xfwm4 -p /general/button_layout -s '|HMC'
 xfconf-query -c xfwm4 -p /general/title_font -s 'Sans Semi-Bold 10'
 
-# panel: let the theme paint it; 16px icons so the clover renders sharp
+# panel: let the theme paint it; 16px icons so the menu ball renders sharp
 x /panels/panel-1/background-style -n -t uint -s 0
 x /panels/panel-1/icon-size -n -t uint -s 16
 [ -n "$menu" ] && {

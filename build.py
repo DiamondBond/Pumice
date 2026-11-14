@@ -212,17 +212,21 @@ def panel_buttons():
             s.write_to_png(os.path.join(out, f"{wname}_{wstate}.png"))
 
 
-LEAF = '<path id="leaf" d="M8 6.5 L4.6 3.1 L6.9 0.8 L8 1.9 L9.1 0.8 L11.4 3.1 Z"/>'  # notched diamond: an angular heart, all edges at 45 degrees
 MENU_ICON = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16" width="16" height="16">
-  <!-- Pumice menu button: four angular heart leaves, turned 45 degrees so they
-       sit on the diagonals, with a small diamond where they join -->
-  <defs>""" + LEAF + """</defs>
-  <g fill="{0}" transform="rotate(45 8 8) translate(8 8) scale(0.92) translate(-8 -8)">
-    <use xlink:href="#leaf"/>
-    <use xlink:href="#leaf" transform="rotate(90 8 8)"/>
-    <use xlink:href="#leaf" transform="rotate(180 8 8)"/>
-    <use xlink:href="#leaf" transform="rotate(270 8 8)"/>
-    <rect x="7.2" y="7.2" width="1.6" height="1.6" transform="rotate(45 8 8)"/>
+  <!-- Pumice menu button: a ball with a wave flowing through it; faint above,
+       a half-tone band, then solid below, fading toward the top right -->
+  <defs>
+    <clipPath id="ball"><circle cx="8" cy="8" r="7"/></clipPath>
+    <linearGradient id="flow" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="{0}"/>
+      <stop offset="1" stop-color="{0}" stop-opacity=".45"/>
+    </linearGradient>
+    <path id="wave" d="M0 10 C3 6 5.5 6 8 8.5 S13 11 16 7 V19 H0 Z"/>
+  </defs>
+  <g clip-path="url(#ball)" fill="url(#flow)">
+    <rect width="16" height="16" fill-opacity=".2"/>
+    <use xlink:href="#wave" transform="translate(0 -2.6)" fill-opacity=".45"/>
+    <use xlink:href="#wave"/>
   </g>
 </svg>
 """

@@ -21,7 +21,7 @@ Adwaita-dark, so there is no GTK theme to keep in sync.
 The panel styling, loaded on top of Adwaita, gives you:
 
 - a flat bar with soft rounded hover states
-- a four-leaf clover as an icon-only applications menu
+- a ball with a wave through it as an icon-only applications menu
 - the workspace switcher drawn as small dots
 - dimmed labels for unfocused tasks
 
@@ -80,7 +80,7 @@ window manager theme* and *Control maximized windows*.
 
 ## Showcase
 
-`./pumice-info.sh` prints a small card for screenshots: a clover, the current
+`./pumice-info.sh` prints a small card for screenshots: the menu ball, the current
 theme and mode, the window buttons in their real colours, and the panel palette.
 It needs a truecolor terminal.
 
