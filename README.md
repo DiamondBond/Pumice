@@ -4,7 +4,7 @@ A quiet, white-and-grey theme for **xfwm4** with matching **xfce4-panel** stylin
 Hairline frames, rounded top corners, and macOS-style dot buttons, drawn to look
 clean with the compositor turned off.
 
-<!-- screenshots -->
+![Pumice-dark-grey](screenshots/dark-grey.png)
 
 ## Variants
 
@@ -75,6 +75,12 @@ With xfwm4's *Hide title of windows when maximized* turned on, the
 plugin (`xfce4-windowck-plugin`) can show the same dots in the panel while a
 window is maximized. In its *Buttons* settings, enable *Get in sync with the
 window manager theme* and *Control maximized windows*.
+
+## Showcase
+
+`./pumice-info.sh` prints a small card for screenshots: a clover, the current
+theme and mode, the window buttons in their real colours, and the panel palette.
+It needs a truecolor terminal.
 
 ## Building
 
