@@ -18,15 +18,15 @@
 .xfce4-panel label { color: @pm_text; }
 
 /* every panel button: flat, soft rounded hover. The 1px inset is a transparent
-   border, not a margin, so the button still takes clicks on the screen edge */
+   border, not a margin, so the button still takes clicks on the screen edges */
 .xfce4-panel button {
   background: none;
   background-clip: padding-box;
   border: solid transparent;
-  border-width: 1px 0;
+  border-width: 1px;
   box-shadow: none;
   border-radius: 6px;
-  margin: 0 1px;
+  margin: 0;
   padding: 0 6px;
   min-height: 0;
   color: @pm_text;
@@ -38,10 +38,10 @@
 .xfce4-panel button:checked        { background-color: @pm_on; }
 
 /* Applications menu: icon only */
-#applicationmenu-button { padding: 0 6px; margin-right: 0; }
+#applicationmenu-button { padding: 0 6px; border-right-width: 0; }
 
 /* tasklist: other windows dimmed, focused one in strong text */
-.tasklist button               { padding: 0 6px; margin: 0 1px; }
+.tasklist button               { padding: 0 6px; margin: 0; }
 .tasklist button label         { color: @pm_dim; }
 .tasklist button:hover label,
 .tasklist button:checked label { color: @pm_strong; }
@@ -54,7 +54,7 @@
 #clock-button label { font-feature-settings: "tnum"; color: @pm_text; margin: 0; padding: 0; }
 
 /* status icons */
-#sn-button { padding: 0 4px; margin: 0; }
+#sn-button { padding: 0 4px; margin: 0; border-width: 1px 0; }
 
 /* workspace switcher (buttons mode): a small faint dot per workspace, the current
    one slightly larger and solid; room after the last one before the tray */
