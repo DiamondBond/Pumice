@@ -257,7 +257,6 @@ for theme, v in VARIANTS.items():
         f.write(f"""\
 active_text_color={TEXT[0]}
 inactive_text_color={TEXT[1]}
-title_alignment=center
 full_width_title=true
 title_shadow_active=false
 title_shadow_inactive=false

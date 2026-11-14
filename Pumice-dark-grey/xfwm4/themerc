@@ -1,6 +1,5 @@
 active_text_color=#ececec
 inactive_text_color=#7c7c7c
-title_alignment=center
 full_width_title=true
 title_shadow_active=false
 title_shadow_inactive=false
