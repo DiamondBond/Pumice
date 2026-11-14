@@ -38,6 +38,7 @@ rofi=${XDG_CONFIG_HOME:-$HOME/.config}/rofi/config.rasi
   [ -n "$pager" ] && echo "xfconf-query -c xfce4-panel -p /plugins/plugin-$pager/miniature-view -n -t bool -s $(q xfce4-panel /plugins/plugin-$pager/miniature-view || echo true)"
   q xfce4-keyboard-shortcuts "$key" >/dev/null || echo "xfconf-query -c xfce4-keyboard-shortcuts -p '$key' -r"
   echo "gsettings set org.gnome.desktop.interface color-scheme $(gsettings get org.gnome.desktop.interface color-scheme)"
+  command -v kreadconfig6 >/dev/null && echo "kwriteconfig6 --file kdeglobals --group Icons --key Theme '$(kreadconfig6 --file kdeglobals --group Icons --key Theme)'"
   echo "xfce4-panel -r"
 } > revert.sh && chmod +x revert.sh
 
