@@ -13,7 +13,7 @@ r=$(printf '\033[0m') b=$(printf '\033[1m') d=$(printf '\033[2m')
 
 # window buttons as they look on a focused window: minimize, maximize, close
 if [ $flavour = grey ]; then
-  [ $mode = dark ] && g='#4f4f4f' || g='#e6e6e6'
+  [ $mode = dark ] && g='#4f4f4f' || g='#d8d8d8'
   dots="$(fg $g)● ● ●$r"
 else
   dots="$(fg '#f4bf4f')●$r $(fg '#61c554')●$r $(fg '#ec6a5e')●$r"

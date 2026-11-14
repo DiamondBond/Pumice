@@ -6,9 +6,9 @@
 For each: the xfwm4 images and themerc, the panel's window-button images (unity/,
 for xfce4-windowck-plugin), the menu icon, panel.css (panel-base.css plus that
 variant's colours), xfce-notify-4.0/gtk.css (notify-base.css likewise) and rofi.rasi
-(rofi-base.rasi likewise). Needs pycairo. The output is committed, so installing
-doesn't need this; run it after changing anything here, in panel-base.css,
-notify-base.css or rofi-base.rasi."""
+(rofi-base.rasi likewise); and, for the README, screenshots/frames.png. Needs
+pycairo. The output is committed, so installing doesn't need this; run it after
+changing anything here, in panel-base.css, notify-base.css or rofi-base.rasi."""
 import math, os, cairo
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -27,7 +27,7 @@ VARIANTS = {
                "inactive": dict(bg="#f7f7f7", border="#5c5c5c", sep="#ebebeb")},
         edge="#707070",                                  # corner edge pixels blend toward this: mid grey suits white and black behind
         idle=("#ececec", "#d0d0d0"),                     # unfocused dot: fill, rim
-        grey=("#e6e6e6", "#5a5a5a"),                     # grey flavour: focused dot, hover marks
+        grey=("#d8d8d8", "#5a5a5a"),                     # grey flavour: focused dot, hover marks
         text=("#1f1f1f", "#9a9a9a"),                     # title: focused, unfocused
         panel=dict(bg="#fbfbfb", line="#d6d6d6", text="#3a3a3a", dim="#555555",
                    strong="#111111", hover="#ededed", on="#e2e2e2", dot="#d4d4d4"),
@@ -75,6 +75,7 @@ def surface(w, h):
 
 def save(s, name):
     s.write_to_png(os.path.join(OUT, name + ".png"))
+    WROTE.add(name)
 
 
 def title_bg(state, W):
@@ -213,6 +214,25 @@ def panel_buttons():
             s.write_to_png(os.path.join(out, f"{wname}_{wstate}.png"))
 
 
+def preview(theme):
+    """README cell: this theme's title bar focused, hovered and unfocused, on the
+    grey its corners are blended toward."""
+    W, GAP = 330, 12
+    rows = (("active", "active", ""), ("active", "prelight", " · hover"), ("inactive", "inactive", " · unfocused"))
+    s, cr = surface(W + 2 * GAP, len(rows) * (H + GAP) + GAP)
+    cr.set_source_rgb(*rgb(EDGE)); cr.paint()
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD); cr.set_font_size(13)
+    for i, (fstate, bstate, label) in enumerate(rows):
+        bar, bcr = title_bg(fstate, W)
+        for j, name in enumerate(("close", "maximize", "hide")):   # where xfwm4 puts them for |HMC
+            dot(bcr, name, bstate, W - 1 - BOFF - BW * (j + .5) - j, BH / 2)
+        y = GAP + i * (H + GAP)
+        cr.set_source_surface(bar, GAP, y); cr.paint()
+        cr.set_source_rgb(*rgb(TEXT[fstate == "inactive"]))
+        cr.move_to(GAP + CW + 4, y + 19); cr.show_text(theme + label)
+    return s
+
+
 MENU_ICON = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16" width="16" height="16">
   <!-- Pumice menu button: a ball with a wave flowing through it; faint above,
        a half-tone band, then solid below, fading toward the top right -->
@@ -232,8 +252,9 @@ MENU_ICON = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w
 </svg>
 """
 
+CELLS = []
 for theme, v in VARIANTS.items():
-    OUT = os.path.join(HERE, theme, "xfwm4")
+    OUT, WROTE = os.path.join(HERE, theme, "xfwm4"), set()
     FRAME, EDGE, IDLE, TEXT = v["frame"], v["edge"], v["idle"], v["text"]
     FLAT_GREY, (GREY_DOT, GREY_MARK) = v.get("flat_grey", False), v["grey"]
     DARK = "dark" in theme
@@ -262,6 +283,7 @@ for theme, v in VARIANTS.items():
         frame(st)
         buttons(st)
     panel_buttons()
+    CELLS.append(preview(theme))
 
     with open(os.path.join(OUT, "themerc"), "w") as f:
         f.write(f"""\
@@ -278,11 +300,17 @@ title_horizontal_offset=0
 show_app_icon=false
 """)
 
-    # sanity: every image xfwm4 looks up exists
+    # sanity: this run wrote every image xfwm4 looks up (files left by earlier runs don't count)
     need = [f"{p}-{s}" for p in ("top-left", "top-right", "left", "right", "bottom", "bottom-left", "bottom-right",
                                  *[f"title-{i}" for i in range(1, 6)]) for s in FRAME]
     need += [f"{g}-{s}" for g in NAMES for s in BTN]
-    missing = [n for n in need if not os.path.exists(os.path.join(OUT, n + ".png"))]
+    missing = [n for n in need if n not in WROTE]
     assert not missing, missing
     print("ok:", OUT)
 
+# README strip: colour flavours left, grey right; light above, dark below
+cw, ch = CELLS[0].get_width(), CELLS[0].get_height()
+s, cr = surface(2 * cw, 2 * ch)
+for i, cell in enumerate(CELLS):
+    cr.set_source_surface(cell, i // 2 * cw, i % 2 * ch); cr.paint()
+s.write_to_png(os.path.join(HERE, "screenshots", "frames.png"))
