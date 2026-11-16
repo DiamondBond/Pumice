@@ -77,9 +77,9 @@ grep -qF pumice/current/rofi.rasi "$rofi" || printf '\n@theme "%s"\n' "$HOME/.lo
 [ -n "$kde" ] && [ "${QT_QPA_PLATFORMTHEME:-kde}" = kde ] &&
   ! grep -q '^export QT_QPA_PLATFORMTHEME=' ~/.xprofile 2>/dev/null && printf '\n%s\n' "$qt" >> ~/.xprofile
 
-# xfwm4: buttons on the right with no app-icon menu (Alt+Space or right-click
-# on the title still opens it); the corner pieces are drawn for this layout
-xfconf-query -c xfwm4 -p /general/button_layout -s '|HMC'
+# xfwm4: buttons on the right, the app icon (the window menu) on the left;
+# the corner pieces are drawn for this layout
+xfconf-query -c xfwm4 -p /general/button_layout -s 'O|HMC'
 xfconf-query -c xfwm4 -p /general/title_font -s 'Sans Medium 10'
 
 # panel: let the theme paint it; 16px icons so the menu ball renders sharp

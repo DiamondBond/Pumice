@@ -8,4 +8,4 @@ title_vertical_offset_inactive=0
 button_offset=11
 button_spacing=0
 title_horizontal_offset=0
-show_app_icon=false
+show_app_icon=true

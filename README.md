@@ -46,7 +46,7 @@ cd Pumice
 - adds one `@import` line to `~/.config/gtk-3.0/gtk.css` for the panel styling
 - adds one `@theme` line to `~/.config/rofi/config.rasi` for a matching rofi
 - where Breeze's colour schemes are installed and no other Qt platform theme (qt6ct, …) is in use: sets `QT_QPA_PLATFORMTHEME=kde` in `~/.xprofile`, so KDE apps follow the Breeze light/dark colours and icons it keeps in `~/.config/kdeglobals` (takes effect at next login)
-- puts the window buttons on the right, without the app-icon menu
+- puts the window buttons on the right and the app icon on the left
 - switches the panel to theme-painted, with 16px icons and an icon-only menu
 - switches the workspace switcher to buttons mode
 - binds **Ctrl+Shift+F5** to the light/dark toggle, if that key is free

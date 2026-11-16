@@ -185,7 +185,14 @@ def buttons(frame_state):
     for bstate in BTN:
         if (frame_state == "inactive") != (bstate == "inactive"):
             continue
+        # the menu button is the app icon: xfwm4 draws it as big as the image's shorter
+        # side and centres both, so a plain 22x16 tile gives a 16px icon on the dots' line
+        s, cr = surface(BW, 16)
+        cr.set_source_rgb(*rgb(bg["bg"])); cr.paint()
+        save(s, f"menu-{bstate}")
         for name in NAMES:
+            if name == "menu":
+                continue
             s, cr = surface(BW, BH)
             cr.set_source_rgb(*rgb(bg["bg"])); cr.paint()
             cr.set_source_rgb(*rgb(bg["border"])); cr.rectangle(0, 0, BW, 1); cr.fill()
@@ -294,7 +301,7 @@ title_vertical_offset_inactive=0
 button_offset={BOFF}
 button_spacing=0
 title_horizontal_offset=0
-show_app_icon=false
+show_app_icon=true
 """)
 
     # sanity: this run wrote every image xfwm4 looks up (files left by earlier runs don't count)
