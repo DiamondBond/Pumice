@@ -107,7 +107,7 @@ def title_bg(state, W):
             px[i:i + 4] = bytes((round(b_ * 255), round(g_ * 255), round(r_ * 255), 255))
     s.mark_dirty()
     rtop(cr, 1, R - 1); cr.set_source_rgb(*rgb(c["bg"])); cr.fill()
-    cr.set_source_rgb(*rgb(c["sep"])); cr.rectangle(0, H - 1, W - 1, 1); cr.fill()
+    cr.set_source_rgb(*rgb(c["sep"])); cr.rectangle(1, H - 1, W - 2, 1); cr.fill()   # inside the border on both sides
     return s, cr
 
 
@@ -176,7 +176,7 @@ def dot(cr, name, bstate, cx, cy):
     cr.set_source_rgb(*rgb(fill)); cr.fill()
     if name in GLYPHS and bstate in ("prelight", "pressed"):
         cr.set_source_rgba(*rgb(GREY_MARK if FLAT_GREY else shade(HUE[name], 0.62)), 0.9)
-        GLYPHS[name](cr, cx, cy + 1)   # centred on the face, which sits low in the dot
+        GLYPHS[name](cr, cx, cy)   # centred on the whole dot: on the face's centre they read as low
 
 
 def buttons(frame_state):
