@@ -35,7 +35,7 @@ VARIANTS = {
     "Pumice-dark": dict(
         frame={"active":   dict(bg="#2c2c2c", border="#0a0a0a", sep="#1e1e1e"),
                "inactive": dict(bg="#242424", border="#151515", sep="#1c1c1c")},
-        edge="#3a3a3a",
+        edge="#000000",                                  # darker than the border, so no light fringe on a dark desktop
         idle=("#2e2e2e", "#1c1c1c"),                     # an empty socket, so focus shows without colour
         grey=("#4f4f4f", "#d4d4d4"),
         well="#1e1e1e",                                  # dot rim: cut darker than the frame, where a shade of the dot would vanish
